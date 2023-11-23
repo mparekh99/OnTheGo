@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Attemp1_calendar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="month">Month</string>
+    <string name="settings_title">Settings Page</string>
+    <string name="event_add_title">Event Add Page</string>
+</resources>
