@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+// Adding the CardView dependency
+    implementation("androidx.cardview:cardview:1.0.0")
 
     val nav_version = "2.7.4"
 // Java language implementation

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CalendarAdapter extends BaseAdapter {
     private final Context context;
-    private final List<String> daysOfMonth; // Change this based on your requirements
+    private final List<String> daysOfMonth;
 
     public CalendarAdapter(Context context, List<String> daysOfMonth) {
         this.context = context;

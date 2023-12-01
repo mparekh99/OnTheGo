@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_blue">#1387BC</color>
+    <color name="light_grey">#655D5C</color>
+    <color name="assignmentsColor">#EFD708</color>
+    <color name="repetitiveColor">#1029B3</color>
+    <color name="majorColor">#E60808</color>
 </resources>

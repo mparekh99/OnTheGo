@@ -5,4 +5,14 @@
     <string name="month">Month</string>
     <string name="settings_title">Settings Page</string>
     <string name="event_add_title">Event Add Page</string>
+    <string name="event_category_title">Event Category</string>
+    <string name="event_title">Event Title</string>
+    <string name="event_desc">Event Description.....</string>
+    <string name="pickTime_txt">Start Time</string>
+
+    <string-array name="event_categories">
+        <item>Assignments</item>
+        <item>Repetitive</item>
+        <item>Major</item>
+    </string-array>
 </resources>

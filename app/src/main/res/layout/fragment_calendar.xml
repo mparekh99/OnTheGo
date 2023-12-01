@@ -26,7 +26,8 @@
         android:text="@string/month"
         android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </TextView>
 
