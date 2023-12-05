@@ -3,12 +3,14 @@ package com.mobileapp.attemp1_calendar;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -28,6 +31,7 @@ import java.util.Locale;
 public class EventAddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     Button dateBtn;
     Button timeBtn;
+    ImageButton infoIconBtn;
     int hour, minute;
     int year, month, day;
 
@@ -42,6 +46,15 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_layout);
         coloredSpinner.setAdapter(adapter);
         coloredSpinner.setOnItemSelectedListener(this);
+
+        // Information icon button
+        infoIconBtn = view.findViewById(R.id.informationIconBtn);
+        infoIconBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopup();
+            }
+        });
 
         // Date selection button
         dateBtn = view.findViewById(R.id.selectDateBtn);
@@ -84,6 +97,24 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         return view;
     }
 
+    // Function to display a popup for when the information icon is clicked on
+    public void showPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Event Information");
+        String message = "<b>Assignments:</b> Homeworks, mini projects or small essays.<br><br>" +
+                "<b>Repetitive:</b> Tasks that you normally do throughout the week or month. For example, picking up your sibling after school everyday.<br><br>" +
+                "<b>Major:</b> Tasks that are urgent or require a lot of effort! Some examples of this are projects, appointments or large essays.";
+        builder.setMessage(Html.fromHtml(message));
+        builder.setPositiveButton("GOT IT!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    // Function to show the a mini calendar and the date selected on it
     private void showDateSelection() {
         final Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(Calendar.YEAR);
