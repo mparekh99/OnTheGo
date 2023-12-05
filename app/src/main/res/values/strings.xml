@@ -8,7 +8,9 @@
     <string name="event_category_title">Event Category</string>
     <string name="event_title">Event Title</string>
     <string name="event_desc">Event Description.....</string>
-    <string name="pickTime_txt">Start Time</string>
+    <string name="selectDate_txt">Select Date</string>
+    <string name="selectTime_txt">Select Time</string>
+    <string name="add_event_btn_txt">Add Event</string>
 
     <string-array name="event_categories">
         <item>Assignments</item>

@@ -7,4 +7,5 @@
     <color name="assignmentsColor">#EFD708</color>
     <color name="repetitiveColor">#1029B3</color>
     <color name="majorColor">#E60808</color>
+    <color name="add_event_btn_color">#0FC817</color>
 </resources>

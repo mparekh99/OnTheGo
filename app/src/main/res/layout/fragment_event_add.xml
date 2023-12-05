@@ -46,6 +46,7 @@
         android:layout_marginTop="5dp"
         android:entries="@array/event_categories"
         android:gravity="center"
+        android:background="@drawable/spinner_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/eventCategory_txtView" />
@@ -84,14 +85,36 @@
                 android:textColor="#FFFFFF"
                 android:hint="@string/event_desc"
                 android:textSize="20sp" />
-            
+
+<!--            <TextView-->
+<!--                android:id="@+id/day_txtView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/month"-->
+<!--                android:textSize="20sp"-->
+<!--                android:layout_marginTop="10dp" />-->
+
             <Button
-                android:id="@+id/timeBtn"
+                android:id="@+id/selectDateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pickTime_txt"
+                android:text="@string/selectDate_txt"
                 android:textSize="20sp"
                 android:textColor="@color/assignmentsColor"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/timer_border_btn"
+                app:backgroundTint="@null" />
+
+            <Button
+                android:id="@+id/selectTimeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selectTime_txt"
+                android:textSize="20sp"
+                android:textColor="@color/assignmentsColor"
+                android:textStyle="bold"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/timer_border_btn"
@@ -99,6 +122,20 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/addEventBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_event_btn_txt"
+        android:textSize="20sp"
+        android:background="@drawable/add_event_btn_border"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardview_1"/>
 
 
 

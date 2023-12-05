@@ -1,6 +1,7 @@
 package com.mobileapp.attemp1_calendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,16 +16,20 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class EventAddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+    Button dateBtn;
     Button timeBtn;
     int hour, minute;
+    int year, month, day;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,8 +43,17 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         coloredSpinner.setAdapter(adapter);
         coloredSpinner.setOnItemSelectedListener(this);
 
-        //  Time picker button
-        timeBtn = view.findViewById(R.id.timeBtn);
+        // Date selection button
+        dateBtn = view.findViewById(R.id.selectDateBtn);
+        dateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDateSelection();
+            }
+        });
+
+        //  Time selection button
+        timeBtn = view.findViewById(R.id.selectTimeBtn);
         timeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,7 +62,10 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         hour = selectedHour;
                         minute = selectedMinute;
-                        timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+//                        timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+                        String timeFormat = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
+                        timeFormat = convertTo12HourFormat(timeFormat);
+                        timeBtn.setText(timeFormat);
                     }
                 };
 
@@ -62,7 +79,54 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
+        //
+
         return view;
+    }
+
+    private void showDateSelection() {
+        final Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                        year = selectedYear;
+                        month = selectedMonth;
+                        day = selectedDay;
+
+                        // Display the selected date
+                        String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", month + 1, day, year);
+                        dateBtn.setText(selectedDate);
+                    }
+                },
+                currentYear,
+                currentMonth,
+                currentDay
+        );
+
+        // Show the date picker dialog
+        datePickerDialog.show();
+    }
+
+    // function to convert timePickerDialog to 12pm/am format instead of military format
+    private String convertTo12HourFormat(String time24Hour) {
+        try {
+            // Parse the input time string in 24-hour format
+            java.text.SimpleDateFormat simpleDateFormat24 = new java.text.SimpleDateFormat("HH:mm", Locale.getDefault());
+            java.util.Date date = simpleDateFormat24.parse(time24Hour);
+
+            // Format the parsed date in 12-hour format with AM/PM
+            java.text.SimpleDateFormat simpleDateFormat12 = new java.text.SimpleDateFormat("hh:mm a", Locale.getDefault());
+            return simpleDateFormat12.format(date);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return time24Hour;
     }
 
     @Override

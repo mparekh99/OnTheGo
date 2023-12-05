@@ -15,6 +15,12 @@
         android:name="com.mobileapp.attemp1_calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" >
+        <argument
+            android:name="eventTitle"
+            app:argType="string" />
+        <argument
+            android:name="eventDesc"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/eventAddFragment"
