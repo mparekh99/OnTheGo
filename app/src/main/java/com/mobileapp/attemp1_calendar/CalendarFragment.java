@@ -95,18 +95,46 @@ public class CalendarFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedDay = (String) parent.getItemAtPosition(position);
                 if (!selectedDay.isEmpty()) {
-                    showPopup(selectedDay);
+//                    showPopup(selectedDay);
+
+                    // FIX THIS PART BELOW, NEED TO FIND CORRESPONDING BUTTON TO DATE PASSED IN FROM ARGUMENT
+//                    // Gathering all of the arguments from the bundle
+//                    String category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
+//                    String title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
+//                    String description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
+//                    String time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
+//                    String date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
+
+                    // Calling on function to display popup that holds the information on the event
+//                    showPopup(category, title, description, time);
                 }
             }
         });
 
+
+
         return view;
     }
 
-    public void showPopup(String selectedDay) {
+    ////////////////////////////////////////////////////////////////////////////////////////  FUNCTIONS ARE BELOW  //////////////////////////////////////////////////////////////////////////////////////////////
+
+//    public void showPopup(String selectedDay) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+//        builder.setTitle("Selected Day");
+//        builder.setMessage("You clicked on: " + selectedDay);
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        builder.show();
+//    }
+
+    public void showPopup(String category, String title, String description, String time, String date) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Selected Day");
-        builder.setMessage("You clicked on: " + selectedDay);
+        builder.setTitle(category);
+        builder.setMessage("Title: " + title + "\nDescription: " + description + "Event starts at " + time);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -115,6 +143,7 @@ public class CalendarFragment extends Fragment {
         });
         builder.show();
     }
+
     public void updateMonthDisplay() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
         System.out.println(sdf.format(currentCalendar.getTime()));

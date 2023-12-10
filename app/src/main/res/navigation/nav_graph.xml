@@ -16,10 +16,19 @@
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" >
         <argument
+            android:name="eventCategory"
+            app:argType="string" />
+        <argument
             android:name="eventTitle"
             app:argType="string" />
         <argument
             android:name="eventDesc"
+            app:argType="string" />
+        <argument
+            android:name="eventDate"
+            app:argType="string" />
+        <argument
+            android:name="eventTime"
             app:argType="string" />
     </fragment>
     <fragment

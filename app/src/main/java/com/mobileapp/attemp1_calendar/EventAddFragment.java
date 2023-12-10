@@ -7,10 +7,13 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +36,11 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
     Button dateBtn;
     Button timeBtn;
     ImageButton infoIconBtn;
+    CardView cardView;
+    Button addEventBtn;
+    Spinner categorySpinner;
+    EditText eventTitle;
+    EditText eventDesc;
     int hour, minute;
     int year, month, day;
 
@@ -39,6 +48,11 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_add, container, false);
+
+        cardView = view.findViewById(R.id.cardview_1);
+        categorySpinner = view.findViewById(R.id.eventCategory_spinner);
+        eventTitle = view.findViewById(R.id.eventTitle_edtTxt);
+        eventDesc = view.findViewById(R.id.eventDesc_edtTxt);
 
         // Spinner dropdown menu
         Spinner coloredSpinner = view.findViewById(R.id.eventCategory_spinner);
@@ -75,9 +89,9 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         hour = selectedHour;
                         minute = selectedMinute;
-//                        timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                         String timeFormat = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
                         timeFormat = convertTo12HourFormat(timeFormat);
+//                        Log.i("timeFormat", "Time Format: " + timeFormat);
                         timeBtn.setText(timeFormat);
                     }
                 };
@@ -92,10 +106,29 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        //
+        // Navigate all the arguments to the CalendarFragment using navigational directions
+        addEventBtn = view.findViewById(R.id.addEventBtn);
+        addEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String category = categorySpinner.getSelectedItem().toString();
+                String title = eventTitle.getText().toString();
+                String description = eventDesc.getText().toString();
+                String time = timeBtn.getText().toString();
+                String date = dateBtn.getText().toString();
+
+                EventAddFragmentDirections.ActionEventAddFragmentToCalendarFragment action = EventAddFragmentDirections.actionEventAddFragmentToCalendarFragment(category, title, description, time, date);
+
+                // navigates to Calendar Fragment after storing all the variables in action
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
+
+
 
         return view;
     }
+////////////////////////////////////////////////////////////////////////////////////////  FUNCTIONS ARE BELOW  //////////////////////////////////////////////////////////////////////////////////////////////
 
     // Function to display a popup for when the information icon is clicked on
     public void showPopup() {
@@ -165,19 +198,23 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         if (view != null) {
             TextView textView = (TextView) view;
 
-            // switch case to handle each item selected and what color is assigned to its textview
+            // switch case to handle each item selected and what color is assigned to its textview. Also, matches cardview background color to textview color
             switch (i) {
                 case 0:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.assignmentsColor));
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.assignmentsColor));
                     break;
                 case 1:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.repetitiveColor));
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.repetitiveColor));
                     break;
                 case 2:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.majorColor));
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.majorColor));
                     break;
             }
         }
+
     }
 
     @Override
