@@ -169,6 +169,7 @@ public class CalendarFragment extends Fragment {
         int daysInMonth = currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         // Get the starting day of the week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
+        currentCalendar.set(Calendar.DAY_OF_MONTH, 1);
         int startingDayOfWeek = currentCalendar.get(Calendar.DAY_OF_WEEK);
 
         // Calculate the number of days to display from the previous month
