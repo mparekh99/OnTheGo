@@ -11,6 +11,7 @@
     <string name="selectDate_txt">Select Date</string>
     <string name="selectTime_txt">Select Time</string>
     <string name="add_event_btn_txt">Add Event</string>
+    <string name="darkModeTxt">DARK MODE</string>
 
     <string-array name="event_categories">
         <item>Assignments</item>

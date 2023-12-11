@@ -36,6 +36,7 @@ public class CalendarFragment extends Fragment {
     private ImageButton nextBtn;
 
     private TextView monthDisplay;
+//    private Map<String, List<Event>> eventsMap = new HashMap<>();
 
 
     @Override
@@ -142,7 +143,7 @@ public class CalendarFragment extends Fragment {
         title_date.setText(date);
         TextView events = (TextView) mView.findViewById(R.id.popUp_events);
         String str = events.getText().toString();
-        str += title + " \n" + description + " \n" + time + "\n";
+        str += "Title: " + title + " \nDescription: " + description + " \nTime: " + time + "\n";
         events.setText(str);
 
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
