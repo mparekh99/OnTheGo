@@ -93,20 +93,30 @@ public class CalendarFragment extends Fragment {
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String selectedDay = (String) parent.getItemAtPosition(position);
+//                System.out.println(selectedDay);
+
                 if (!selectedDay.isEmpty()) {
 //                    showPopup(selectedDay);
 
-                    // FIX THIS PART BELOW, NEED TO FIND CORRESPONDING BUTTON TO DATE PASSED IN FROM ARGUMENT
-//                    // Gathering all of the arguments from the bundle
-//                    String category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
-//                    String title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
-//                    String description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
-//                    String time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
-//                    String date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
+                    if (requireArguments().containsKey("eventCategory") && requireArguments().containsKey("eventTitle") && requireArguments().containsKey("eventDesc") && requireArguments().containsKey("eventTime") && requireArguments().containsKey("eventDate")) {
+                        String category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
+                        String title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
+                        String description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
+                        String time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
+                        String date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
+//                        System.out.println(date);
 
-                    // Calling on function to display popup that holds the information on the event
-//                    showPopup(category, title, description, time);
+                        String event_date = date.substring(3, 5);
+                        System.out.println(event_date + "\n" + selectedDay + "\n");
+
+
+                        if (event_date.equals(selectedDay)) {
+                            System.out.println("It should open");
+                            showPopup(category, title, description, time, date);
+                        }
+                    }
                 }
             }
         });
@@ -116,37 +126,32 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////  FUNCTIONS ARE BELOW  //////////////////////////////////////////////////////////////////////////////////////////////
-
-//    public void showPopup(String selectedDay) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-//        builder.setTitle("Selected Day");
-//        builder.setMessage("You clicked on: " + selectedDay);
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.show();
-//    }
-
     public void showPopup(String category, String title, String description, String time, String date) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(category);
-        builder.setMessage("Title: " + title + "\nDescription: " + description + "Event starts at " + time);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(requireContext());
+        View mView = getLayoutInflater().inflate(R.layout.popup, null);
+        TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
+        title_date.setText(date);
+        TextView events = (TextView) mView.findViewById(R.id.popUp_events);
+        String str = "";
+        str += title + " \n" + description + " \n" + time;
+        events.setText(str);
+
+        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        builder.show();
+
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     public void updateMonthDisplay() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-        System.out.println(sdf.format(currentCalendar.getTime()));
+//        System.out.println(sdf.format(currentCalendar.getTime()));
         monthDisplay.setText(sdf.format(currentCalendar.getTime()));
     }
 

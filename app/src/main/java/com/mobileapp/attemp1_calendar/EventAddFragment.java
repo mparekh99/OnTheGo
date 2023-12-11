@@ -116,8 +116,9 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                 String description = eventDesc.getText().toString();
                 String time = timeBtn.getText().toString();
                 String date = dateBtn.getText().toString();
+//                System.out.println("Add fragment" + date);
 
-                EventAddFragmentDirections.ActionEventAddFragmentToCalendarFragment action = EventAddFragmentDirections.actionEventAddFragmentToCalendarFragment(category, title, description, time, date);
+                EventAddFragmentDirections.ActionEventAddFragmentToCalendarFragment action = EventAddFragmentDirections.actionEventAddFragmentToCalendarFragment(category, title, description, date, time);
 
                 // navigates to Calendar Fragment after storing all the variables in action
                 Navigation.findNavController(view).navigate(action);
