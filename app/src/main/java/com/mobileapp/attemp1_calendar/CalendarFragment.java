@@ -133,8 +133,8 @@ public class CalendarFragment extends Fragment {
         TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
         title_date.setText(date);
         TextView events = (TextView) mView.findViewById(R.id.popUp_events);
-        String str = "";
-        str += title + " \n" + description + " \n" + time;
+        String str = events.getText().toString();
+        str += title + " \n" + description + " \n" + time + "\n";
         events.setText(str);
 
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
