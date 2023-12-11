@@ -108,7 +108,15 @@ public class CalendarFragment extends Fragment {
                         String date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
 //                        System.out.println(date);
 
-                        String event_date = date.substring(3, 5);
+                        String event_date;
+
+                        if (Integer.parseInt(selectedDay) < 10) {
+                            event_date = date.substring(4,5);
+                        }
+                        else {
+                            event_date = date.substring(3, 5);
+                        }
+
                         System.out.println(event_date + "\n" + selectedDay + "\n");
 
 
