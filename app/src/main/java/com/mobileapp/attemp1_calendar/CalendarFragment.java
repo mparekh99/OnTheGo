@@ -1,5 +1,6 @@
 package com.mobileapp.attemp1_calendar;
 
+import com.mobileapp.attemp1_calendar.Event;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,8 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CalendarFragment extends Fragment {
 
@@ -35,7 +38,19 @@ public class CalendarFragment extends Fragment {
 
     private ImageButton nextBtn;
 
+    private List<Event> list = new ArrayList<>();;
+
+    private String category;
+    private String title;
+    private String description;
+    private String time;
+    private String date;
+
+    private Event event;
     private TextView monthDisplay;
+
+    private Event temp;
+    private boolean argsFound = false;
 //    private Map<String, List<Event>> eventsMap = new HashMap<>();
 
 
@@ -52,6 +67,25 @@ public class CalendarFragment extends Fragment {
         nextBtn = view.findViewById(R.id.next_btn);
 
         monthDisplay = view.findViewById(R.id.month_display);
+
+
+
+        // Checks if there are arguements passed in
+        if (getArguments() != null && getArguments().containsKey("eventCategory") && getArguments().containsKey("eventTitle") && getArguments().containsKey("eventDesc") && getArguments().containsKey("eventTime") && getArguments().containsKey("eventDate") ) {
+            category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
+            title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
+            description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
+            time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
+            date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
+            event = new Event(category, title, description, date, time);
+            list.add(event);
+            System.out.println(event.toString());
+            argsFound = true;
+        }
+        else {
+            argsFound = false;
+        }
+
 
         currentCalendar = Calendar.getInstance();
 
@@ -96,36 +130,31 @@ public class CalendarFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String selectedDay = (String) parent.getItemAtPosition(position);
-//                System.out.println(selectedDay);
+                String event_date;
+                System.out.println("Were the args found: " + argsFound);
+                if (!list.isEmpty()) {
 
-                if (!selectedDay.isEmpty()) {
-//                    showPopup(selectedDay);
-
-                    if (requireArguments().containsKey("eventCategory") && requireArguments().containsKey("eventTitle") && requireArguments().containsKey("eventDesc") && requireArguments().containsKey("eventTime") && requireArguments().containsKey("eventDate")) {
-                        String category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
-                        String title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
-                        String description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
-                        String time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
-                        String date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
-//                        System.out.println(date);
-
-                        String event_date;
+                    for (int i = 0; i < list.size(); i++) {
+                        temp = list.get(i);
 
                         if (Integer.parseInt(selectedDay) < 10) {
-                            event_date = date.substring(4,5);
+                            event_date = temp.getDate().substring(4,5);
                         }
                         else {
-                            event_date = date.substring(3, 5);
+                            event_date = temp.getDate().substring(3,5);
                         }
 
                         System.out.println(event_date + "\n" + selectedDay + "\n");
 
-
                         if (event_date.equals(selectedDay)) {
-                            System.out.println("It should open");
-                            showPopup(category, title, description, time, date);
+                            System.out.println("The dates matched!!");
+                            showPopup(temp);
                         }
+
                     }
+                }
+                else {
+                    showBlankPopup(selectedDay);
                 }
             }
         });
@@ -135,16 +164,35 @@ public class CalendarFragment extends Fragment {
         return view;
     }
 
-    public void showPopup(String category, String title, String description, String time, String date) {
+    public void showBlankPopup(String selectedDay) {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(requireContext());
         View mView = getLayoutInflater().inflate(R.layout.popup, null);
         TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
-        title_date.setText(date);
+        title_date.setText(selectedDay);
         TextView events = (TextView) mView.findViewById(R.id.popUp_events);
-        String str = events.getText().toString();
-        str += "Title: " + title + " \nDescription: " + description + " \nTime: " + time + "\n";
-        events.setText(str);
+        events.setText("NO EVENTS FOR TODAY!!!!");
+        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        mBuilder.setView(mView);
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
+    }
+    public void showPopup(Event event) {
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(requireContext());
+        View mView = getLayoutInflater().inflate(R.layout.popup, null);
+        TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
+        title_date.setText(event.getDate());
+        TextView upcoming_events = (TextView) mView.findViewById(R.id.popUp_events);
+        String str = upcoming_events.getText().toString();
+        str += "Title: " + event.getTitle() + " \nDescription: " + event.getDescription() + " \nTime: " + event.getTime() + "\n";
+        upcoming_events.setText(str);
 
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
