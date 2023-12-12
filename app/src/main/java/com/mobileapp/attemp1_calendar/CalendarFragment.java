@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
@@ -38,7 +39,9 @@ public class CalendarFragment extends Fragment {
 
     private ImageButton nextBtn;
 
-    private List<Event> list = new ArrayList<>();;
+//    private List<Event> list = new ArrayList<>();
+
+    private CalendarViewModel calendarViewModel;
 
     private String category;
     private String title;
@@ -58,6 +61,8 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        calendarViewModel = new ViewModelProvider(requireActivity()).get(CalendarViewModel.class);
+
         view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         calendarGridView = view.findViewById(R.id.calendarGridView);
@@ -69,7 +74,6 @@ public class CalendarFragment extends Fragment {
         monthDisplay = view.findViewById(R.id.month_display);
 
 
-
         // Checks if there are arguements passed in
         if (getArguments() != null && getArguments().containsKey("eventCategory") && getArguments().containsKey("eventTitle") && getArguments().containsKey("eventDesc") && getArguments().containsKey("eventTime") && getArguments().containsKey("eventDate") ) {
             category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
@@ -78,12 +82,21 @@ public class CalendarFragment extends Fragment {
             time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
             date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
             event = new Event(category, title, description, date, time);
-            list.add(event);
+//            list.add(event);
+            calendarViewModel.addEvent(event);
             System.out.println(event.toString());
             argsFound = true;
         }
         else {
             argsFound = false;
+        }
+
+        if (!calendarViewModel.getEventsList().isEmpty()) {
+            System.out.println("Printing whole list: \n");
+            for (int i = 0; i < calendarViewModel.getEventsList().size(); i++) {
+                System.out.println(calendarViewModel.getEventsList().get(i));
+                System.out.println("The size is: " + calendarViewModel.getEventsList().size());
+            }
         }
 
 
@@ -132,10 +145,10 @@ public class CalendarFragment extends Fragment {
                 String selectedDay = (String) parent.getItemAtPosition(position);
                 String event_date;
                 System.out.println("Were the args found: " + argsFound);
-                if (!list.isEmpty()) {
+                if (argsFound == true) {
 
-                    for (int i = 0; i < list.size(); i++) {
-                        temp = list.get(i);
+                    for (int i = 0; i < calendarViewModel.getEventsList().size(); i++) {
+                        temp = calendarViewModel.getEventsList().get(i);
 
                         if (Integer.parseInt(selectedDay) < 10) {
                             event_date = temp.getDate().substring(4,5);
