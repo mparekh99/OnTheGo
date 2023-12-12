@@ -46,10 +46,11 @@ public class CalendarAdapter extends BaseAdapter {
         String day = daysOfMonth.get(position);
 
         dayTextView.setText(day);
+
+        // Sets up the size of each cell layout of the days
         ViewGroup.LayoutParams params = dayTextView.getLayoutParams();
-        params.height = 300;
+        params.height = 270;
         dayTextView.setLayoutParams(params);
-//        dayTextView.setBackgroundResource(R.drawable.blue_border);
 
         return view;
     }

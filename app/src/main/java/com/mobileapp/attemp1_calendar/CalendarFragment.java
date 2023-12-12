@@ -49,24 +49,24 @@ public class CalendarFragment extends Fragment {
     private String description;
     private String time;
     private String date;
-
     private Event event;
     private TextView monthDisplay;
-
-    private Event temp;
     private boolean argsFound = false;
 
     private String convertToDateFormat(String selectedDay) {
-        // Assuming currentCalendar represents the current month
-        currentCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDay));
+        // if statement checks to see if the date exist (if you click on a date that's an empty box, it won't go into condition)
+        if (selectedDay.length() > 0) {
+            // Assuming currentCalendar represents the current month
+            currentCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDay));
 
-        // Create a SimpleDateFormat object for the desired date format
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+            // Create a SimpleDateFormat object for the desired date format
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
 
-        // Format the date and return
-        return sdf.format(currentCalendar.getTime());
+            // Format the date and return
+            return sdf.format(currentCalendar.getTime());
+        }
+        return "Date doesn't exist";
     }
-//    private Map<String, List<Event>> eventsMap = new HashMap<>();
 
 
     @Override
@@ -94,7 +94,6 @@ public class CalendarFragment extends Fragment {
             date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
             event = new Event(category, title, description, date, time);
             System.out.println(date);
-//            list.add(event);
             calendarViewModel.addEvent(date, event);
             System.out.println(event.toString());
             argsFound = true;
@@ -141,32 +140,24 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 String selectedDay = (String) parent.getItemAtPosition(position);
                 selectedDay = convertToDateFormat(selectedDay);
-                System.out.println("The selected day is; " + selectedDay);
+                System.out.println("The selected day is: " + selectedDay);
                 System.out.println("Were the args found: " + argsFound);
-//                if (argsFound == true) {
-
-//                    System.out.println(event_date + "\n" + selectedDay + "\n");
 
                 if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
-                    //check
                     System.out.println("Hello");
                     showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
                     System.out.println("Bye");
                 } else {
                     showBlankPopup(selectedDay);
                 }
-
-//                }
-
             }
         });
+
 
         return view;
     }
