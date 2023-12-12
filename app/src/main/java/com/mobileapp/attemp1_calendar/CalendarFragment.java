@@ -39,8 +39,6 @@ public class CalendarFragment extends Fragment {
 
     private ImageButton nextBtn;
 
-//    private List<Event> list = new ArrayList<>();
-
     private CalendarViewModel calendarViewModel;
 
     private String category;
@@ -156,12 +154,9 @@ public class CalendarFragment extends Fragment {
 
                     if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
                         //check
-                        if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
-                            System.out.println("Hello");
-                            showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
-                            System.out.println("Bye");
-                        }
-
+                        System.out.println("Hello");
+                        showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
+                        System.out.println("Bye");
                     }
 
                 }
