@@ -4,6 +4,8 @@ import com.mobileapp.attemp1_calendar.Event;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,8 +177,18 @@ public class CalendarFragment extends Fragment {
         View mView = getLayoutInflater().inflate(R.layout.popup, null);
         TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
         title_date.setText(selectedDay);
-        TextView events = (TextView) mView.findViewById(R.id.popUp_events);
-        events.setText("NO EVENTS FOR TODAY!!!!");
+
+        // Added a linearlayout to the popup.xml to add a textview into this
+        LinearLayout events = mView.findViewById(R.id.popUp_events_layout);
+
+        // Creating new textview to add text
+        TextView eventTxtView = new TextView(requireContext());
+
+        eventTxtView.setText("NO EVENTS FOR TODAY!!!!");
+        eventTxtView.setTextSize(18);
+
+        // Adding the textview to the linear layout of the popup.xml
+        events.addView(eventTxtView);
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -193,13 +206,33 @@ public class CalendarFragment extends Fragment {
         View mView = getLayoutInflater().inflate(R.layout.popup, null);
         TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
         title_date.setText(selectedDay);
-        TextView upcoming_events = (TextView) mView.findViewById(R.id.popUp_events);
-        String str = upcoming_events.getText().toString();
-        for(int i = 0; i < list.size(); i++) {
-            str += "Title: " + list.get(i).getTitle() + " \nDescription: " + list.get(i).getDescription() + " \nTime: " + list.get(i).getTime() + "\n";
-        }
 
-        upcoming_events.setText(str);
+        // Added a linearlayout to the popup.xml to add multiple textviews into this for each event
+        LinearLayout upcoming_events = mView.findViewById(R.id.popUp_events_layout);
+
+        for(int i = 0; i < list.size(); i++) {
+            // Creating a new textview to customize its color and text
+            TextView eventTxtView = new TextView(requireContext());
+
+            eventTxtView.setText("Title: " + list.get(i).getTitle() + " \nDescription: " + list.get(i).getDescription() + " \nTime: " + list.get(i).getTime() + "\n\n");
+            eventTxtView.setTextSize(18);
+
+            // Switch statement determines which color to set the textview depending on what category it is
+            switch (list.get(i).getCategory()) {
+                case "Assignments":
+                    eventTxtView.setTextColor(ContextCompat.getColor(requireContext(), R.color.assignmentsColor));
+                    break;
+                case "Repetitive":
+                    eventTxtView.setTextColor(ContextCompat.getColor(requireContext(), R.color.repetitiveColor));
+                    break;
+                case "Major":
+                    eventTxtView.setTextColor(ContextCompat.getColor(requireContext(), R.color.majorColor));
+                    break;
+            }
+
+            // Add this customized textview into the linear layout of the popup.xml
+            upcoming_events.addView(eventTxtView);
+        }
 
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
