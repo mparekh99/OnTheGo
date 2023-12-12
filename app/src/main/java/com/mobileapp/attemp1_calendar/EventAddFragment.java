@@ -97,9 +97,9 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                 };
 
                 // Sets timer up in spinner style
-                int style = AlertDialog.THEME_HOLO_DARK;
+//                int style = AlertDialog.THEME_HOLO_DARK;
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener, hour, minute, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener, hour, minute, false);
 
                 timePickerDialog.setTitle("Select Time");
                 timePickerDialog.show();

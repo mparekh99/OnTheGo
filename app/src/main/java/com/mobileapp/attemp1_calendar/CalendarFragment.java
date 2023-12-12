@@ -69,10 +69,9 @@ public class CalendarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         calendarViewModel = new ViewModelProvider(requireActivity()).get(CalendarViewModel.class);
-
-        view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         calendarGridView = view.findViewById(R.id.calendarGridView);
         daysOfWeek = view.findViewById(R.id.days_of_week);
@@ -148,25 +147,23 @@ public class CalendarFragment extends Fragment {
                 selectedDay = convertToDateFormat(selectedDay);
                 System.out.println("The selected day is; " + selectedDay);
                 System.out.println("Were the args found: " + argsFound);
-                if (argsFound == true) {
+//                if (argsFound == true) {
 
 //                    System.out.println(event_date + "\n" + selectedDay + "\n");
 
-                    if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
-                        //check
-                        System.out.println("Hello");
-                        showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
-                        System.out.println("Bye");
-                    }
-
-                }
-                else {
+                if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
+                    //check
+                    System.out.println("Hello");
+                    showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
+                    System.out.println("Bye");
+                } else {
                     showBlankPopup(selectedDay);
                 }
+
+//                }
+
             }
         });
-
-
 
         return view;
     }

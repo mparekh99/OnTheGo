@@ -11,17 +11,29 @@ public class CalendarViewModel extends ViewModel {
 
     private Map<String, List<Event>> map = new HashMap<>();
 
-    public void addEvent(String key, Event event) {
-        // Check if the key exists in the map
-        if (map.containsKey(key)) {
-            // Key exists, retrieve the existing list and add the event
-            List<Event> existingList = map.get(key);
-            existingList.add(event);
-        } else {
-            // Key doesn't exist, create a new list, add the event, and put it in the map
+    public void addEvent(String date, Event event) {
+        if (!map.containsKey(date)) {
+            // Creating a new list and adding the event if the date doesn't exist
             List<Event> newList = new ArrayList<>();
             newList.add(event);
-            map.put(key, newList);
+            map.put(date, newList);
+        } else {
+            // Else, checks to see if there's a duplicate event
+            List<Event> eventExists = map.get(date);
+            boolean isDuplicateEvent = false;
+
+            for (Event eventExist : eventExists) {
+                if (eventExist.equals(event)) {
+                    // Duplicate founded
+                    isDuplicateEvent = true;
+                    break;
+                }
+            }
+
+            // If duplicate is not found, then add a new event
+            if (!isDuplicateEvent) {
+                eventExists.add(event);
+            }
         }
     }
 //    private List<Event> list = new ArrayList<>();

@@ -1,5 +1,7 @@
 package com.mobileapp.attemp1_calendar;
 
+import java.util.Objects;
+
 public class Event {
     private String category;
     private String title;
@@ -46,6 +48,24 @@ public class Event {
                 ", time='" + time + '\'' +
                 ", date='" + date + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Event otherEvent = (Event) obj;
+
+        return Objects.equals(category, otherEvent.category)
+                && Objects.equals(title, otherEvent.title)
+                && Objects.equals(description, otherEvent.description)
+                && Objects.equals(date, otherEvent.date)
+                && Objects.equals(time, otherEvent.time);
     }
 }
 
