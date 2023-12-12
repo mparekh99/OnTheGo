@@ -54,6 +54,17 @@ public class CalendarFragment extends Fragment {
 
     private Event temp;
     private boolean argsFound = false;
+
+    private String convertToDateFormat(String selectedDay) {
+        // Assuming currentCalendar represents the current month
+        currentCalendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(selectedDay));
+
+        // Create a SimpleDateFormat object for the desired date format
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+
+        // Format the date and return
+        return sdf.format(currentCalendar.getTime());
+    }
 //    private Map<String, List<Event>> eventsMap = new HashMap<>();
 
 
@@ -82,21 +93,14 @@ public class CalendarFragment extends Fragment {
             time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
             date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
             event = new Event(category, title, description, date, time);
+            System.out.println(date);
 //            list.add(event);
-            calendarViewModel.addEvent(event);
+            calendarViewModel.addEvent(date, event);
             System.out.println(event.toString());
             argsFound = true;
         }
         else {
             argsFound = false;
-        }
-
-        if (!calendarViewModel.getEventsList().isEmpty()) {
-            System.out.println("Printing whole list: \n");
-            for (int i = 0; i < calendarViewModel.getEventsList().size(); i++) {
-                System.out.println(calendarViewModel.getEventsList().get(i));
-                System.out.println("The size is: " + calendarViewModel.getEventsList().size());
-            }
         }
 
 
@@ -143,28 +147,23 @@ public class CalendarFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String selectedDay = (String) parent.getItemAtPosition(position);
-                String event_date;
+                selectedDay = convertToDateFormat(selectedDay);
+                System.out.println("The selected day is; " + selectedDay);
                 System.out.println("Were the args found: " + argsFound);
                 if (argsFound == true) {
 
-                    for (int i = 0; i < calendarViewModel.getEventsList().size(); i++) {
-                        temp = calendarViewModel.getEventsList().get(i);
+//                    System.out.println(event_date + "\n" + selectedDay + "\n");
 
-                        if (Integer.parseInt(selectedDay) < 10) {
-                            event_date = temp.getDate().substring(4,5);
-                        }
-                        else {
-                            event_date = temp.getDate().substring(3,5);
-                        }
-
-                        System.out.println(event_date + "\n" + selectedDay + "\n");
-
-                        if (event_date.equals(selectedDay)) {
-                            System.out.println("The dates matched!!");
-                            showPopup(temp);
+                    if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
+                        //check
+                        if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
+                            System.out.println("Hello");
+                            showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
+                            System.out.println("Bye");
                         }
 
                     }
+
                 }
                 else {
                     showBlankPopup(selectedDay);
@@ -196,15 +195,18 @@ public class CalendarFragment extends Fragment {
         AlertDialog dialog = mBuilder.create();
         dialog.show();
     }
-    public void showPopup(Event event) {
+    public void showPopup(List<Event> list, String selectedDay) {
 
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(requireContext());
         View mView = getLayoutInflater().inflate(R.layout.popup, null);
         TextView title_date = (TextView) mView.findViewById(R.id.popUp_date);
-        title_date.setText(event.getDate());
+        title_date.setText(selectedDay);
         TextView upcoming_events = (TextView) mView.findViewById(R.id.popUp_events);
         String str = upcoming_events.getText().toString();
-        str += "Title: " + event.getTitle() + " \nDescription: " + event.getDescription() + " \nTime: " + event.getTime() + "\n";
+        for(int i = 0; i < list.size(); i++) {
+            str += "Title: " + list.get(i).getTitle() + " \nDescription: " + list.get(i).getDescription() + " \nTime: " + list.get(i).getTime() + "\n";
+        }
+
         upcoming_events.setText(str);
 
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
