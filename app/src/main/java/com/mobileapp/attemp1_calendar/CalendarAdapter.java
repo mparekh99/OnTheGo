@@ -1,6 +1,7 @@
 package com.mobileapp.attemp1_calendar;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +48,19 @@ public class CalendarAdapter extends BaseAdapter {
 
         dayTextView.setText(day);
 
-        // Sets up the size of each cell layout of the days
-        ViewGroup.LayoutParams params = dayTextView.getLayoutParams();
-        params.height = 270;
-        dayTextView.setLayoutParams(params);
+        int orientation = context.getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Adjusts the size of the calendar cells in landscape mode
+            ViewGroup.LayoutParams params = dayTextView.getLayoutParams();
+            params.height = 140;
+            dayTextView.setLayoutParams(params);
+        } else {
+            // Adjusts the size of the calendar cells in portrait mode
+            ViewGroup.LayoutParams params = dayTextView.getLayoutParams();
+            params.height = 270;
+            dayTextView.setLayoutParams(params);
+        }
 
         return view;
     }

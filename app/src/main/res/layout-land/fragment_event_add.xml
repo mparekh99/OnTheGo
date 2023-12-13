@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventAddFragment">
+
+
+    <TextView
+        android:id="@+id/eventPageTitle_txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_add_title"
+        android:textSize="35dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/rectangleView"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventPageTitle_txtView" />
+
+    <Button
+        android:id="@+id/selectDateBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selectDate_txt"
+        android:textSize="20sp"
+        android:textColor="@color/assignmentsColor"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/timer_border_btn"
+        android:layout_marginEnd="25dp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toStartOf="@id/eventCategory_txtView"
+        app:layout_constraintTop_toBottomOf="@id/rectangleView" />
+
+    <TextView
+        android:id="@+id/eventCategory_txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/event_category_title"
+        android:textSize="30dp"
+        android:textColor="@color/light_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rectangleView" />
+
+    <Button
+        android:id="@+id/selectTimeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selectTime_txt"
+        android:textSize="20sp"
+        android:textColor="@color/assignmentsColor"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/timer_border_btn"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toEndOf="@id/eventCategory_txtView"
+        app:layout_constraintTop_toBottomOf="@id/rectangleView" />
+
+    <Spinner
+        android:id="@+id/eventCategory_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/event_categories"
+        android:gravity="center"
+        android:background="@drawable/spinner_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventCategory_txtView" />
+
+    <ImageButton
+        android:id="@+id/informationIconBtn"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/info_icon"
+        app:layout_constraintStart_toEndOf="@id/eventCategory_spinner"
+        app:layout_constraintTop_toBottomOf="@id/eventCategory_txtView"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/assignmentsColor"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eventCategory_spinner" >
+
+        <LinearLayout
+            android:id="@+id/linear_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="3dp">
+
+            <EditText
+                android:id="@+id/eventTitle_edtTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:hint="@string/event_title"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/eventDesc_edtTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:hint="@string/event_desc"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+        android:id="@+id/addEventBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_event_btn_txt"
+        android:textSize="20sp"
+        android:background="@drawable/add_event_btn_border"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardview_1"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

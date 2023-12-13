@@ -91,13 +91,9 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                         minute = selectedMinute;
                         String timeFormat = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
                         timeFormat = convertTo12HourFormat(timeFormat);
-//                        Log.i("timeFormat", "Time Format: " + timeFormat);
                         timeBtn.setText(timeFormat);
                     }
                 };
-
-                // Sets timer up in spinner style
-//                int style = AlertDialog.THEME_HOLO_DARK;
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener, hour, minute, false);
 
