@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mobileapp.attemp1_calendar.databinding.FragmentEventAddBinding;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -43,27 +45,29 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
     EditText eventDesc;
     int hour, minute;
     int year, month, day;
+    private FragmentEventAddBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event_add, container, false);
+        binding = FragmentEventAddBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        cardView = view.findViewById(R.id.cardview_1);
-        categorySpinner = view.findViewById(R.id.eventCategory_spinner);
-        eventTitle = view.findViewById(R.id.eventTitle_edtTxt);
-        eventDesc = view.findViewById(R.id.eventDesc_edtTxt);
+        cardView = binding.cardview1;
+        categorySpinner = binding.eventCategorySpinner;
+        eventTitle = binding.eventTitleEdtTxt;
+        eventDesc = binding.eventDescEdtTxt;
 
         // Spinner dropdown menu
-        Spinner coloredSpinner = view.findViewById(R.id.eventCategory_spinner);
+        Spinner coloredSpinner = binding.eventCategorySpinner;
         ArrayAdapter adapter = ArrayAdapter.createFromResource(getContext(), R.array.event_categories, R.layout.color_spinner_layout);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_layout);
         coloredSpinner.setAdapter(adapter);
         coloredSpinner.setOnItemSelectedListener(this);
 
         // Information icon button
-        infoIconBtn = view.findViewById(R.id.informationIconBtn);
-        infoIconBtn.setOnClickListener(new View.OnClickListener() {
+        infoIconBtn = binding.informationIconBtn;
+        binding.informationIconBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopup();
@@ -71,8 +75,8 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         });
 
         // Date selection button
-        dateBtn = view.findViewById(R.id.selectDateBtn);
-        dateBtn.setOnClickListener(new View.OnClickListener() {
+//        dateBtn = binding.selectDateBtn;
+        binding.selectDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDateSelection();
@@ -80,8 +84,8 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         });
 
         //  Time selection button
-        timeBtn = view.findViewById(R.id.selectTimeBtn);
-        timeBtn.setOnClickListener(new View.OnClickListener() {
+//        timeBtn = binding.selectTimeBtn;
+        binding.selectTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -91,36 +95,33 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
                         minute = selectedMinute;
                         String timeFormat = String.format(Locale.getDefault(), "%02d:%02d", hour, minute);
                         timeFormat = convertTo12HourFormat(timeFormat);
-                        timeBtn.setText(timeFormat);
+                        binding.selectTimeBtn.setText(timeFormat);
                     }
                 };
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), onTimeSetListener, hour, minute, false);
-
                 timePickerDialog.setTitle("Select Time");
                 timePickerDialog.show();
             }
         });
 
         // Navigate all the arguments to the CalendarFragment using navigational directions
-        addEventBtn = view.findViewById(R.id.addEventBtn);
-        addEventBtn.setOnClickListener(new View.OnClickListener() {
+//        addEventBtn = binding.addEventBtn;
+        binding.addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String category = categorySpinner.getSelectedItem().toString();
-                String title = eventTitle.getText().toString();
-                String description = eventDesc.getText().toString();
-                String time = timeBtn.getText().toString();
-                String date = dateBtn.getText().toString();
+                String category = binding.eventCategorySpinner.getSelectedItem().toString();
+                String title = binding.eventTitleEdtTxt.getText().toString();
+                String description = binding.eventDescEdtTxt.getText().toString();
+                String time = binding.selectTimeBtn.getText().toString();
+                String date = binding.selectDateBtn.getText().toString();
 //                System.out.println("Add fragment" + date);
                 EventAddFragmentDirections.ActionEventAddFragmentToCalendarFragment action = EventAddFragmentDirections.actionEventAddFragmentToCalendarFragment(category, title, description, date, time);
 
-                // navigates to Calendar Fragment after storing all the variables in action
+                // Navigates to Calendar Fragment after storing all the variables in action
                 Navigation.findNavController(view).navigate(action);
             }
         });
-
-
 
         return view;
     }
@@ -161,7 +162,7 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
 
                         // Display the selected date
                         String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", month + 1, day, year);
-                        dateBtn.setText(selectedDate);
+                        binding.selectDateBtn.setText(selectedDate);
                     }
                 },
                 currentYear,
@@ -173,7 +174,7 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         datePickerDialog.show();
     }
 
-    // function to convert timePickerDialog to 12pm/am format instead of military format
+    // Function to convert timePickerDialog to 12pm/am format
     private String convertTo12HourFormat(String time24Hour) {
         try {
             // Parse the input time string in 24-hour format
@@ -194,23 +195,22 @@ public class EventAddFragment extends Fragment implements AdapterView.OnItemSele
         if (view != null) {
             TextView textView = (TextView) view;
 
-            // switch case to handle each item selected and what color is assigned to its textview. Also, matches cardview background color to textview color
+            // Switch case to handle each item selected and what color is assigned to its textview. Also, matches cardview background color to textview color
             switch (i) {
                 case 0:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.assignmentsColor));
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.assignmentsColor));
+                    binding.cardview1.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.assignmentsColor));
                     break;
                 case 1:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.repetitiveColor));
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.repetitiveColor));
+                    binding.cardview1.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.repetitiveColor));
                     break;
                 case 2:
                     textView.setTextColor(ContextCompat.getColor(adapterView.getContext(), R.color.majorColor));
-                    cardView.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.majorColor));
+                    binding.cardview1.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.majorColor));
                     break;
             }
         }
-
     }
 
     @Override

@@ -36,7 +36,6 @@ public class CalendarViewModel extends ViewModel {
             }
         }
     }
-//    private List<Event> list = new ArrayList<>();
 
     public Map<String, List<Event>> getEventsMap() {
         return map;

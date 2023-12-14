@@ -17,8 +17,6 @@ public class Event {
         this.time = time;
     }
 
-    // Add getters and setters if needed
-
     public String getCategory() {
         return category;
     }
@@ -29,10 +27,6 @@ public class Event {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getDate() {
-        return date;
     }
 
     public String getTime() {

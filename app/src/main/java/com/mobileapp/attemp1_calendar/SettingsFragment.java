@@ -19,33 +19,38 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.mobileapp.attemp1_calendar.databinding.FragmentEventAddBinding;
+import com.mobileapp.attemp1_calendar.databinding.FragmentSettingsBinding;
+
 public class SettingsFragment extends Fragment {
     private View view;
     Switch switchDarkMode;
     Button btnInfo;
+    private FragmentSettingsBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_settings, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        switchDarkMode = view.findViewById(R.id.switchDarkMode);
-        btnInfo = view.findViewById(R.id.btnInfo);
+//        switchDarkMode = binding.switchDarkMode;
+//        btnInfo = binding.btnInfo;
 
         // Retrieve switch state from SharedPreferences
         boolean isDarkModeOn = loadSwitchState();
-        switchDarkMode.setChecked(isDarkModeOn);
+        binding.switchDarkMode.setChecked(isDarkModeOn);
 
-        switchDarkMode.setOnClickListener(new View.OnClickListener() {
+        binding.switchDarkMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isDarkModeOn = switchDarkMode.isChecked();
+                boolean isDarkModeOn = binding.switchDarkMode.isChecked();
                 saveSwitchState(isDarkModeOn);
-                updateDarkMode(isDarkModeOn);
+                updateDarkMode();
             }
         });
 
-        btnInfo.setOnClickListener(new View.OnClickListener() {
+        binding.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopup();
@@ -104,9 +109,9 @@ public class SettingsFragment extends Fragment {
         editor.apply();
     }
 
-    private void updateDarkMode(boolean isDarkModeOn) {
+    private void updateDarkMode() {
         // This changes the theme to night mode or not
-        if(switchDarkMode.isChecked()) {
+        if(binding.switchDarkMode.isChecked()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

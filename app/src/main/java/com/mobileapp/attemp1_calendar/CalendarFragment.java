@@ -1,6 +1,8 @@
 package com.mobileapp.attemp1_calendar;
 
 import com.mobileapp.attemp1_calendar.Event;
+import com.mobileapp.attemp1_calendar.databinding.FragmentCalendarBinding;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -32,15 +34,11 @@ public class CalendarFragment extends Fragment {
 
     private Calendar currentCalendar;
 
-    private View view;
-
     private GridView calendarGridView;
-
     private GridLayout daysOfWeek;
-
     private ImageButton prevBtn;
-
     private ImageButton nextBtn;
+    private TextView monthDisplay;
 
     private CalendarViewModel calendarViewModel;
 
@@ -50,8 +48,96 @@ public class CalendarFragment extends Fragment {
     private String time;
     private String date;
     private Event event;
-    private TextView monthDisplay;
-    private boolean argsFound = false;
+    private FragmentCalendarBinding binding;
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentCalendarBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+        calendarViewModel = new ViewModelProvider(requireActivity()).get(CalendarViewModel.class);
+
+        calendarGridView = binding.calendarGridView;
+        daysOfWeek = binding.daysOfWeek;
+
+        prevBtn = binding.prevBtn;
+        nextBtn = binding.nextBtn;
+
+        monthDisplay = binding.monthDisplay;
+
+
+        // Checks if there are arguements passed in
+        if (getArguments() != null && getArguments().containsKey("eventCategory") && getArguments().containsKey("eventTitle") && getArguments().containsKey("eventDesc") && getArguments().containsKey("eventTime") && getArguments().containsKey("eventDate") ) {
+            category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
+            title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
+            description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
+            time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
+            date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
+            event = new Event(category, title, description, date, time);
+            calendarViewModel.addEvent(date, event);
+        }
+        currentCalendar = Calendar.getInstance();
+
+        // Set the initial month display
+        updateMonthDisplay();
+
+        // Set the initial calendar grid
+        setCalendarGrid();
+
+        // Set click listeners for the next and previous buttons
+        binding.prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Move to the previous month
+                currentCalendar.add(Calendar.MONTH, -1);
+
+                // Update the month display
+                updateMonthDisplay();
+
+                // Refresh the calendar grid
+                setCalendarGrid();
+            }
+        });
+
+        binding.nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Move to the next month
+                currentCalendar.add(Calendar.MONTH, 1);
+
+                // Update the month display
+                updateMonthDisplay();
+
+                // Refresh the calendar grid
+                setCalendarGrid();
+            }
+        });
+
+        binding.calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedDay = (String) parent.getItemAtPosition(position);
+                selectedDay = convertToDateFormat(selectedDay);
+
+                if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
+                    showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
+                } else {
+                    showBlankPopup(selectedDay);
+                }
+            }
+        });
+
+        return view;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////  FUNCTIONS ARE BELOW  //////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     private String convertToDateFormat(String selectedDay) {
         // if statement checks to see if the date exist (if you click on a date that's an empty box, it won't go into condition)
@@ -66,100 +152,6 @@ public class CalendarFragment extends Fragment {
             return sdf.format(currentCalendar.getTime());
         }
         return "Date doesn't exist";
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_calendar, container, false);
-
-        calendarViewModel = new ViewModelProvider(requireActivity()).get(CalendarViewModel.class);
-
-        calendarGridView = view.findViewById(R.id.calendarGridView);
-        daysOfWeek = view.findViewById(R.id.days_of_week);
-
-        prevBtn = view.findViewById(R.id.prev_btn);
-        nextBtn = view.findViewById(R.id.next_btn);
-
-        monthDisplay = view.findViewById(R.id.month_display);
-
-
-        // Checks if there are arguements passed in
-        if (getArguments() != null && getArguments().containsKey("eventCategory") && getArguments().containsKey("eventTitle") && getArguments().containsKey("eventDesc") && getArguments().containsKey("eventTime") && getArguments().containsKey("eventDate") ) {
-            category = CalendarFragmentArgs.fromBundle(requireArguments()).getEventCategory();
-            title = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTitle();
-            description = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDesc();
-            time = CalendarFragmentArgs.fromBundle(requireArguments()).getEventTime();
-            date = CalendarFragmentArgs.fromBundle(requireArguments()).getEventDate();
-            event = new Event(category, title, description, date, time);
-            System.out.println(date);
-            calendarViewModel.addEvent(date, event);
-            System.out.println(event.toString());
-            argsFound = true;
-        }
-        else {
-            argsFound = false;
-        }
-
-
-        currentCalendar = Calendar.getInstance();
-
-        // Set the initial month display
-        updateMonthDisplay();
-
-        // Set the initial calendar grid
-        setCalendarGrid();
-
-        // Set click listeners for the next and previous buttons
-        prevBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Move to the previous month
-                currentCalendar.add(Calendar.MONTH, -1);
-
-                // Update the month display
-                updateMonthDisplay();
-
-                // Refresh the calendar grid
-                setCalendarGrid();
-            }
-        });
-
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Move to the next month
-                currentCalendar.add(Calendar.MONTH, 1);
-
-                // Update the month display
-                updateMonthDisplay();
-
-                // Refresh the calendar grid
-                setCalendarGrid();
-            }
-        });
-
-        calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedDay = (String) parent.getItemAtPosition(position);
-                selectedDay = convertToDateFormat(selectedDay);
-                System.out.println("The selected day is: " + selectedDay);
-                System.out.println("Were the args found: " + argsFound);
-
-                if (calendarViewModel.getEventsMap().containsKey(selectedDay)) {
-                    System.out.println("Hello");
-                    showPopup(calendarViewModel.getListForKey(selectedDay), selectedDay);
-                    System.out.println("Bye");
-                } else {
-                    showBlankPopup(selectedDay);
-                }
-            }
-        });
-
-
-        return view;
     }
 
     public void showBlankPopup(String selectedDay) {
@@ -205,7 +197,7 @@ public class CalendarFragment extends Fragment {
             // Creating a new textview to customize its color and text
             TextView eventTxtView = new TextView(requireContext());
 
-            eventTxtView.setText("Title: " + list.get(i).getTitle() + " \nDescription: " + list.get(i).getDescription() + " \nTime: " + list.get(i).getTime() + "\n\n");
+            eventTxtView.setText("Title: " + list.get(i).getTitle() + " \nDescription: " + list.get(i).getDescription() + " \nTime: " + list.get(i).getTime() + "\n");
             eventTxtView.setTextSize(18);
 
             // Switch statement determines which color to set the textview depending on what category it is
@@ -240,7 +232,7 @@ public class CalendarFragment extends Fragment {
     public void updateMonthDisplay() {
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 //        System.out.println(sdf.format(currentCalendar.getTime()));
-        monthDisplay.setText(sdf.format(currentCalendar.getTime()));
+        binding.monthDisplay.setText(sdf.format(currentCalendar.getTime()));
     }
 
     public void setCalendarGrid() {
@@ -276,7 +268,6 @@ public class CalendarFragment extends Fragment {
         }
 
         CalendarAdapter adapter = new CalendarAdapter(requireContext(), daysOfMonth);
-        calendarGridView.setAdapter(adapter);
-
+        binding.calendarGridView.setAdapter(adapter);
     }
 }
